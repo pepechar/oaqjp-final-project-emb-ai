@@ -10,11 +10,33 @@ def emotion_detector(text_to_analyse):
                         headers = headers, 
                         json = inputJson)
 
-    jsonResp = json.loads(resp.text)
+    print(f"THIS IS THE STATUS CODE FORM THE API: {resp.status_code}")
 
-    emotionDict = jsonResp["emotionPredictions"][0]["emotion"]
-    emotionDict["dominant_response"] = max(emotionDict, key= emotionDict.get)
 
+    if resp.status_code == 200: 
+        jsonResp = json.loads(resp.text)
+        emotionDict = jsonResp["emotionPredictions"][0]["emotion"]
+        emotionDict["dominant_response"] = max(emotionDict, key= emotionDict.get)
+
+    elif resp.status_code == 400: 
+        emotionDict = {
+            "dominant_response": None, 
+            "anger": None, 
+            "disgust": None, 
+            "fear": None, 
+            "joy": None, 
+            "sadness": None
+        }
     
+    else: 
+        emotionDict = {
+            "dominant_response": None, 
+            "anger": None, 
+            "disgust": None, 
+            "fear": None, 
+            "joy": None, 
+            "sadness": None
+        }
+
     return emotionDict
 
